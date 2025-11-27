@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router"
 import { Link } from "../components/Link"
+import { useAuth } from "../context/AuthContext.jsx"
 import snarkdown from 'snarkdown'
 import styles from './Detail.module.css'
 
@@ -23,6 +24,16 @@ function JobSection ({ title, content }) {
     </section>
   )
 }
+
+function ButtonApply (){
+  const {isLoggedIn} = useAuth();
+  return (
+   <button disabled={!isLoggedIn} className={styles.applyButton}>
+    {isLoggedIn ? 'Aplicar ahora' : 'Inicia sesión para aplicar'}
+   </button>
+  )
+}
+
 
 export default function JobDetail () {
   const { jobId } = useParams()
@@ -101,10 +112,7 @@ export default function JobDetail () {
           {job.empresa} · {job.ubicacion}
         </p>
       </header>
-
-      <button className={styles.applyButton}>
-        Aplicar ahora
-      </button>
+      <ButtonApply />
 
       <JobSection title="Descripción del puesto" content={job.content.description} />
       <JobSection title="Responsabilidades" content={job.content.responsibilities} />
